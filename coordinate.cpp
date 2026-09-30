@@ -1,0 +1,86 @@
+#include "coordinate.h"
+
+Coordinate Coordinate::operator*(Transformation transformation) const
+{
+	Coordinate c{*this};
+	switch (transformation) {
+		case Transformation::None:
+			break;
+		case Transformation::OneQuarter:
+			c.x = y;
+			c.y = -x;
+			break;
+		case Transformation::Half:
+			c.x = -x;
+			c.y = -y;
+			break;
+		case Transformation::ThreeQuarters:
+			c.x = -y;
+			c.y = x;
+			break;
+		case Transformation::VMirrorNone:
+			c.x = -x;
+			c.y = y;
+			break;
+		case Transformation::VMirrorOneQuarter:
+			c.x = -y;
+			c.y = -x;
+			break;
+		case Transformation::VMirrorHalf:
+			c.x = x;
+			c.y = -y;
+			break;
+		case Transformation::VMirrorThreeQuarters:
+			c.x = y;
+			c.y = x;
+			break;
+	};
+	return c;
+}
+
+Coordinate& Coordinate::operator*=(Transformation transformation)
+{
+	*this = operator*(transformation);
+	return *this;
+}
+
+Coordinate Coordinate::operator+(const Coordinate& translation) const
+{
+	return {x + translation.x, y + translation.y};
+}
+
+Coordinate& Coordinate::operator+=(const Coordinate& translation)
+{
+	*this = operator+(translation);
+	return *this;
+}
+
+bool operator<(const Coordinate& c1, const Coordinate& c2)
+{
+	return c1.y < c2.y || (c1.y == c2.y && c1.x < c2.x);
+}
+
+bool operator==(const Coordinate& c1, const Coordinate& c2)
+{
+	return c1.x == c2.x && c1.y == c2.y;
+}
+
+bool operator>(const Coordinate& c1, const Coordinate& c2)
+{
+	return !(c1 < c2) && !(c1 == c2);
+}
+
+bool operator<=(const Coordinate& c1, const Coordinate& c2)
+{
+	return (c1 < c2) || (c1 == c2);
+}
+
+bool operator>=(const Coordinate& c1, const Coordinate& c2)
+{
+	return (c1 > c2) || (c1 == c2);
+}
+
+bool operator!=(const Coordinate& c1, const Coordinate& c2)
+{
+	return !(c1 == c2);
+}
