@@ -1,4 +1,6 @@
 #include "pieces_set.h"
+#include "piece.h"
+#include <iostream>
 
 //Static initialisation
 Piece PiecesSet::piecesPool[21] = {
@@ -32,15 +34,36 @@ Piece PiecesSet::piecesPool[21] = {
 
 PiecesSet::PiecesSet() {
     for (int i = 0; i < 21; i++) {
-        piecesList[i] = &piecesPool[i];
+        piecesList.push_back(&piecesPool[i]);
     }
 }
 
-const Piece* PiecesSet::getPiece(int index) const {
-    if (0<=index && index<=21){
-        return piecesList[index];
+std::vector<Piece*> PiecesSet::getPiecesList() const{
+    return piecesList;
+}
+
+std::vector<Piece*>::const_iterator PiecesSet::begin() const{
+    return piecesList.cbegin();
+}
+
+std::vector<Piece*>::const_iterator PiecesSet::end() const{
+    return piecesList.cend();
+}
+
+bool PiecesSet::ListIsEmpty() const{
+    return piecesList.empty();
+}
+
+void PiecesSet::remove(Piece &pieceToRemove){
+    int i=0;
+    // find the element to remove in the list and remove it(by starting count to the first element and count each iteration)
+    for (const Piece* p: piecesList) {
+        if (p == &pieceToRemove) {
+            piecesList.erase(piecesList.begin()+i);
+            std::cout<<"Piece deleted"<<std::endl;
+            return;
+        }
+        i++;
     }
-    else {
-        return nullptr;
-    }
+    return;
 }

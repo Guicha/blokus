@@ -2,6 +2,7 @@
 #define BLOKUS_PIECES_SET_H
 
 #include "piece.h"
+#include <vector>
 
 #if 0
 /*
@@ -137,11 +138,15 @@ class PiecesSet
 {
 private:
     static Piece piecesPool[21];
-    const Piece * piecesList[21];
+    std::vector<Piece*> piecesList;
 
 public:
     PiecesSet();
-    const Piece* getPiece(int index) const;
+    std::vector<Piece*> getPiecesList() const;
+    std::vector<Piece*>::const_iterator begin() const;
+    std::vector<Piece*>::const_iterator end() const;
+    void remove(Piece &pieceToRemove);
+    bool ListIsEmpty() const;
 };
 
 
