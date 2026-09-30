@@ -1,6 +1,8 @@
 #ifndef BLOKUS_PIECES_SET_H
 #define BLOKUS_PIECES_SET_H
 
+#include "piece.h"
+
 #if 0
 /*
  * Liste des coordonnées de chaque pièce, selon la figure 3 du sujet.
@@ -134,8 +136,12 @@
 class PiecesSet
 {
 private:
+    static Piece all_pieces[21];
+    const Piece * list_piece[21];
 
 public:
+    PiecesSet();
+    const Piece* getPiece(int index) const;
 };
 
 
