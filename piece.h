@@ -8,11 +8,14 @@ class Piece
 {
 private:
 	// Q2. Créer un conteneur de coordonnées
-	const std::vector<Coordinate> squares;
+	std::vector<Coordinate> squares;
 
 public:
 	// Q2. Créer un constructeur prenant des coordonnées en paramètres
 	Piece(const std::initializer_list<Coordinate>&& squares);
+
+	std::vector<Coordinate>::iterator begin();
+	std::vector<Coordinate>::iterator end();
 
 	friend bool operator<(const Piece& p1, const Piece& p2);
 	friend bool operator==(const Piece& p1, const Piece& p2);
