@@ -1,7 +1,7 @@
 #include "pieces_set.h"
 
 //Static initialisation
-Piece PiecesSet::all_pieces[21] = {
+Piece PiecesSet::piecesPool[21] = {
     // 1-square piece
     Piece({{0, 0}}),
     // 2-square piece
@@ -32,13 +32,13 @@ Piece PiecesSet::all_pieces[21] = {
 
 PiecesSet::PiecesSet() {
     for (int i = 0; i < 21; i++) {
-        list_piece[i] = &all_pieces[i];
+        piecesList[i] = &piecesPool[i];
     }
 }
 
 const Piece* PiecesSet::getPiece(int index) const {
     if (0<=index && index<=21){
-        return list_piece[index];
+        return piecesList[index];
     }
     else {
         return nullptr;

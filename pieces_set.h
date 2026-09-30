@@ -136,8 +136,8 @@
 class PiecesSet
 {
 private:
-    static Piece all_pieces[21];
-    const Piece * list_piece[21];
+    static Piece piecesPool[21];
+    const Piece * piecesList[21];
 
 public:
     PiecesSet();
