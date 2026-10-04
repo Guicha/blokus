@@ -78,7 +78,7 @@ bool Board::canPlace(PiecesSet& piecesSet, Piece& piece, Placement& placement) {
             break;
           }
         }
-        
+
         if (alreadyInTarget) {
           continue;
         }
@@ -96,6 +96,8 @@ bool Board::canPlace(PiecesSet& piecesSet, Piece& piece, Placement& placement) {
     if (!foundDiag) {
       return false;
     }
+
+    return true;
   }
 
 }
