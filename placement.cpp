@@ -1,4 +1,5 @@
 #include "placement.h"
+#include "board.h"
 #include "coordinate.h"
 
 std::vector<Coordinate> Placement::calculatePosition(Piece* p) {
@@ -17,6 +18,15 @@ std::vector<Coordinate> Placement::calculateTransformation(Piece* p) {
   return targetPosition;
 }
 
-bool Placement::isValid() {
-  return true;
+bool Placement::isValid(Piece* p) {
+  Piece tempPiece = Piece(*p);
+  std::vector<Coordinate> targetPosition = calculatePosition(&tempPiece);
+  tempPiece.setSquares(targetPosition);
+  targetPosition = calculateTransformation(&tempPiece);
+
+  if (targetPosition.back().x < Board::SIZE && targetPosition.back().y < Board::SIZE) {
+    return true;
+  } else {
+    return false;
+  }
 }

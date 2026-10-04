@@ -15,7 +15,7 @@ class Placement {
   public:
     std::vector<Coordinate> calculatePosition(Piece* p);
     std::vector<Coordinate> calculateTransformation(Piece* p);
-    bool isValid();
+    bool isValid(Piece* p); // avec ça on vérifie juste si les coordonnées sont dans le plateau ; on vérifie pas tout de suite si le placement est correct vis a vis des autres cases + ne pas implémenter la méthode "validate" de board car elle overlap celle la 
 };
 
 #endif // BLOKUS_PLACEMENT_H

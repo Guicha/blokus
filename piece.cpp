@@ -9,6 +9,10 @@ Piece::Piece(const std::initializer_list<Coordinate>&& squares) :
   }()}
 {}
 
+void Piece::setSquares(std::vector<Coordinate> newSquares) {
+  this->squares = newSquares;
+}
+
 std::vector<Coordinate>::iterator Piece::begin() {
   return squares.begin();
 }
