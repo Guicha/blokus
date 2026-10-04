@@ -2,6 +2,7 @@
 #include "color.h"
 #include "coordinate.h"
 #include "pieces_set.h"
+#include "transformation.h"
 
 Board::Board() {
   for (int i=0; i<Board::SIZE; i++) {
@@ -58,7 +59,6 @@ bool Board::canPlace(PiecesSet& piecesSet, Piece& piece, Placement& placement) {
 
     // On check les diagonales et côtés adjacents
     bool foundDiag = false;
-
     int dx[8] = {-1, -1, 1, 1, -1, 1, 0, 0};
     int dy[8] = {-1, 1, -1, 1, 0, 0, -1, 1};
     bool isDiagonal[8] = {true, true, true, true, false, false, false, false};
@@ -99,5 +99,32 @@ bool Board::canPlace(PiecesSet& piecesSet, Piece& piece, Placement& placement) {
 
     return true;
   }
+}
 
+bool Board::canPlay(PiecesSet& piecesSet, Color& color) {
+  // Si le joueur n'a plus de pièces
+  if (piecesSet.listIsEmpty()) {
+    return false;
+  }
+
+  std::vector<Piece*> pieces = piecesSet.getPiecesList();
+
+  for (Piece* piece : pieces) {
+    // On teste toutes les transformations possibles (rotations + symétries)
+    for (int t = 0; t < 8; t++) {
+      // On teste toutes les positions possibles sur le plateau
+      for (int x = 0; x < SIZE; x++) {
+        for (int y = 0; y < SIZE; y++) {
+          Placement placement = Placement(TRANSFORMATIONS[t], Coordinate{x, y}, color);
+
+          if (canPlace(piecesSet, *piece, placement)) {
+            return true; // Dès qu'un placement valide est trouvé, inutile de chercher plus loin
+          }
+        }
+      }
+    }
+  }
+
+  // Aucune combinaison pièce/transformation/position n'est valide
+  return false;
 }
