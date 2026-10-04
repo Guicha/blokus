@@ -13,6 +13,7 @@ private:
 public:
 	// Q2. Créer un constructeur prenant des coordonnées en paramètres
 	Piece(const std::initializer_list<Coordinate>&& squares);
+	std::vector<Coordinate>& getSquares();
 	void setSquares(std::vector<Coordinate> newSquares);
 	
 	std::vector<Coordinate>::iterator begin();

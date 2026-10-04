@@ -9,6 +9,10 @@ Piece::Piece(const std::initializer_list<Coordinate>&& squares) :
   }()}
 {}
 
+std::vector<Coordinate>& Piece::getSquares() {
+  return this->squares;
+}
+
 void Piece::setSquares(std::vector<Coordinate> newSquares) {
   this->squares = newSquares;
 }
@@ -20,7 +24,6 @@ std::vector<Coordinate>::iterator Piece::begin() {
 std::vector<Coordinate>::iterator Piece::end() {
   return squares.end();
 }
-
 
 bool operator<(const Piece& p1, const Piece& p2) {
   return p1.squares < p2.squares;
