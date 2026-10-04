@@ -2,6 +2,12 @@
 #include "board.h"
 #include "coordinate.h"
 
+Placement::Placement(const Transformation& transformation, const Coordinate& origin, const Color& color) :
+  transformation{transformation},
+  origin{origin},
+  color{color}
+{}
+
 std::vector<Coordinate> Placement::calculatePosition(std::vector<Coordinate> initialPosition) {
   std::vector<Coordinate> targetPosition;
   for (Coordinate& c : initialPosition) {
