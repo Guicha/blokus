@@ -128,3 +128,26 @@ bool Board::canPlay(PiecesSet& piecesSet, Color& color) {
   // Aucune combinaison pièce/transformation/position n'est valide
   return false;
 }
+
+std::string Board::place(PiecesSet& piecesSet, Piece& piece, const Transformation& transformation, const Coordinate& origin, const Color& color) {
+  // On crée le placement correspondant
+  Placement placement = Placement(transformation, origin, color);
+
+  // On vérifie si la piece peut etre placée
+  if (!canPlace(piecesSet, piece, placement)) {
+    return "Impossible de placer la pièce !";
+  }
+
+  // On place la pièce
+  std::vector<Coordinate> targetPosition = placement.calculateTransformation(placement.calculatePosition(piece.getSquares()));
+
+  piece.setSquares(targetPosition);
+
+  for (Coordinate c : targetPosition) {
+    this->at(c.x, c.y) = color;
+  }
+
+  piecesSet.remove(piece);
+
+  return "Pièce placée !";
+}
