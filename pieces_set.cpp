@@ -50,7 +50,7 @@ std::vector<Piece*>::const_iterator PiecesSet::end() const{
     return piecesList.cend();
 }
 
-bool PiecesSet::ListIsEmpty() const{
+bool PiecesSet::listIsEmpty() const{
     return piecesList.empty();
 }
 

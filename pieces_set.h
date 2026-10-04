@@ -146,7 +146,7 @@ public:
     std::vector<Piece*>::const_iterator end() const;
     void remove(Piece &pieceToRemove);
 
-    bool ListIsEmpty() const;
+    bool listIsEmpty() const;
 
 private:
     static Piece piecesPool[SET_SIZE];
