@@ -58,7 +58,7 @@ void PiecesSet::remove(Piece &pieceToRemove){
     int i=0;
     // find the element to remove in the list and remove it(by starting count to the first element and count each iteration)
     for (const Piece* p: piecesList) {
-        if (p == &pieceToRemove) {
+        if (*p == pieceToRemove) {
             piecesList.erase(piecesList.begin()+i);
             std::cout<<"Piece deleted"<<std::endl;
             return;

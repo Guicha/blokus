@@ -142,10 +142,13 @@ private:
 
 public:
     PiecesSet();
+
     std::vector<Piece*> getPiecesList() const;
+
     std::vector<Piece*>::const_iterator begin() const;
     std::vector<Piece*>::const_iterator end() const;
     void remove(Piece &pieceToRemove);
+
     bool ListIsEmpty() const;
 };
 
