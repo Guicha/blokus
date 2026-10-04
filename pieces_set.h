@@ -136,11 +136,8 @@
 
 class PiecesSet
 {
-private:
-    static Piece piecesPool[21];
-    std::vector<Piece*> piecesList;
-
 public:
+    static const int SET_SIZE = 21;
     PiecesSet();
 
     std::vector<Piece*> getPiecesList() const;
@@ -150,6 +147,11 @@ public:
     void remove(Piece &pieceToRemove);
 
     bool ListIsEmpty() const;
+
+private:
+    static Piece piecesPool[SET_SIZE];
+    std::vector<Piece*> piecesList;
+
 };
 
 

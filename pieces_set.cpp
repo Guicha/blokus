@@ -3,7 +3,7 @@
 #include <iostream>
 
 //Static initialisation
-Piece PiecesSet::piecesPool[21] = {
+Piece PiecesSet::piecesPool[PiecesSet::SET_SIZE] = {
     // 1-square piece
     Piece({{0, 0}}),
     // 2-square piece
@@ -33,7 +33,7 @@ Piece PiecesSet::piecesPool[21] = {
 };
 
 PiecesSet::PiecesSet() {
-    for (int i = 0; i < 21; i++) {
+    for (int i = 0; i < PiecesSet::SET_SIZE; i++) {
         piecesList.push_back(&piecesPool[i]);
     }
 }
