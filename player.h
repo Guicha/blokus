@@ -13,7 +13,7 @@ private:
     std::optional<Piece> lastPiecePlayed;
 
 public:
-    Player();
+    explicit Player(Color color);
 
     PiecesSet getPlayerPieceList() const;
     Color getColor() const;

@@ -3,8 +3,7 @@
 #include "piece.h"
 #include "pieces_set.h"
 
-Player::Player(){
-    color = Empty;
+Player::Player(Color color) : color{color}{
 }
 
 Color Player::getColor() const{
