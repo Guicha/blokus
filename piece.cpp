@@ -1,5 +1,6 @@
 #include "piece.h"
 #include "coordinate.h"
+#include <algorithm>
 
 Piece::Piece(const std::initializer_list<Coordinate>&& squares) :
   squares{[&squares] {
@@ -23,6 +24,14 @@ std::vector<Coordinate>::iterator Piece::begin() {
 
 std::vector<Coordinate>::iterator Piece::end() {
   return squares.end();
+}
+
+std::vector<Coordinate>::const_iterator Piece::begin() const {
+  return squares.cbegin();
+}
+
+std::vector<Coordinate>::const_iterator Piece::end() const {
+  return squares.cend();
 }
 
 bool operator<(const Piece& p1, const Piece& p2) {

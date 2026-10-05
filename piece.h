@@ -19,6 +19,10 @@ public:
 	std::vector<Coordinate>::iterator begin();
 	std::vector<Coordinate>::iterator end();
 
+	//permet un parcours en read only d'un objet `const Piece&` (utilisé par `TextInterface')
+	std::vector<Coordinate>::const_iterator begin() const;
+	std::vector<Coordinate>::const_iterator end() const;
+
 	friend bool operator<(const Piece& p1, const Piece& p2);
 	friend bool operator==(const Piece& p1, const Piece& p2);
 };
