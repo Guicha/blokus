@@ -54,6 +54,10 @@ bool PiecesSet::listIsEmpty() const{
     return piecesList.empty();
 }
 
+int PiecesSet::size() const{
+    return static_cast<int>(piecesList.size());
+}
+
 void PiecesSet::remove(Piece &pieceToRemove){
     int i=0;
     // find the element to remove in the list and remove it(by starting count to the first element and count each iteration)

@@ -138,6 +138,8 @@ class PiecesSet
 {
 public:
     static const int SET_SIZE = 21;
+    using PieceIterator = std::vector<Piece*>::const_iterator;
+
     PiecesSet();
 
     std::vector<Piece*> getPiecesList() const;
@@ -147,6 +149,7 @@ public:
     void remove(Piece &pieceToRemove);
 
     bool listIsEmpty() const;
+    int size() const;
 
 private:
     static Piece piecesPool[SET_SIZE];

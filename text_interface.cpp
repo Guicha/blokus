@@ -76,7 +76,7 @@ PiecesSet::PieceIterator TextInterface::getPiece(const PiecesSet& piecesSet)
 	std::array<std::u16string, 4> ls;
 	int i=0;
 	for (auto&& p : piecesSet) {
-		std::u16string d = printPiece(p, i);
+		std::u16string d = printPiece(*p, i);
 		for (int j=0 ; j<4 ; j++) {
 			std::copy(d.begin() + 8 * 2 * j, d.begin() + 8 * 2 * (j + 1), std::back_inserter(ls[j]));
 		}
