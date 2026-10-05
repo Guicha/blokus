@@ -16,6 +16,15 @@ Color& Board::at(int x, int y) {
   return this->playBoard[Board::SIZE - 1 - x][y];
 }
 
+Color Board::getColor(const Coordinate& c) const {
+  // Même convention que at() : le 0,0 logique est en bas à gauche
+  return this->playBoard[Board::SIZE - 1 - c.x][c.y];
+}
+
+bool Board::validate(const Coordinate& c) {
+  return c.x >= 0 && c.x < Board::SIZE && c.y >= 0 && c.y < Board::SIZE;
+}
+
 bool Board::canPlace(PiecesSet& piecesSet, Piece& piece, Placement& placement) {
   // 1. On regarde d'abord si le placement est dans le plateau
   if (!placement.isValid(&piece)) {
@@ -138,10 +147,8 @@ std::string Board::place(PiecesSet& piecesSet, Piece& piece, const Transformatio
     return "Impossible de placer la pièce !";
   }
 
-  // On place la pièce
+  // On place la pièce (sans modifier la pièce elle-même : piecesPool est partagée par les 4 joueurs)
   std::vector<Coordinate> targetPosition = placement.calculateTransformation(placement.calculatePosition(piece.getSquares()));
-
-  piece.setSquares(targetPosition);
 
   for (Coordinate c : targetPosition) {
     this->at(c.x, c.y) = color;
@@ -149,5 +156,6 @@ std::string Board::place(PiecesSet& piecesSet, Piece& piece, const Transformatio
 
   piecesSet.remove(piece);
 
-  return "Pièce placée !";
+  // Le placement a réussi : on renvoie une chaîne vide
+  return "";
 }
