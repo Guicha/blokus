@@ -67,6 +67,9 @@ int Game::computeScore(Color color){
 void Game::playTurn(Color color){
     Player* player = findPlayer(color);
 
+    userinterface.getMessageOutput()
+        << "==== NOUVEAU TOUR : C'est au tout du joueur " << color << " ====\n";
+
     PiecesSet piecesForCheck = player->getPlayerPieceList();
     if (!board.canPlay(piecesForCheck, color)) {
         userinterface.getMessageOutput()
