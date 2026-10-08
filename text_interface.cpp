@@ -120,10 +120,7 @@ Coordinate TextInterface::getPosition()
 	m_is.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
 	Coordinate c{x, y};
-	if (Board::validate(c))
-		return c;
-	else
-		return Coordinate{0, 0};
+	return c;
 }
 
 Transformation TextInterface::getTransformation(const Piece* piece)
