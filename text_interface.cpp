@@ -151,26 +151,41 @@ PiecesSet::PieceIterator TextInterface::getPiece(const PiecesSet& piecesSet, Col
 	}
 	m_os << "\n";
 
-	m_os << "Pièce ? ";
 	int piece;
-	m_is >> piece;
-	m_is.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+	while (true) {
+		m_os << "Pièce ? ";
+		piece = -1;
+		try {
+			std::string line = readLine();
+			size_t consumed = 0;
+			piece = std::stoi(line, &consumed);
+			if (!onlySpacesAfter(line, consumed))
+				piece = -1;
+		} catch (const std::exception&) {
+			piece = -1;
+		}
+		if (piece >= 0 && piece < piecesSet.size())
+			break;
+		m_os << "Entrée invalide : veuillez entrer un numéro de pièce entre 0 et "
+		     << (piecesSet.size() - 1) << ".\n";
+	}
 
-
-	if (piece < 0 || piece >= piecesSet.size())
-		return piecesSet.end();
 	return std::next(piecesSet.begin(), piece);
 }
 
 Coordinate TextInterface::getPosition()
 {
-	m_os << "Position ? ";
-	int x, y;
-	m_is >> x >> y;
-	m_is.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-	Coordinate c{x, y};
-	return c;
+	while (true) {
+		m_os << "Position ? (format attendu : \"0 0\") ";
+		std::istringstream iss{readLine()};
+		int x, y;
+		char extra;
+		if ((iss >> x >> y) && !(iss >> extra)) {
+			return Coordinate{x, y};
+		}
+		m_os << "Entrée invalide : veuillez entrer deux entiers séparés par un espace, "
+		        "au format \"0 0\".\n";
+	}
 }
 
 Transformation TextInterface::getTransformation(const Piece* piece, Color color)
@@ -195,16 +210,26 @@ Transformation TextInterface::getTransformation(const Piece* piece, Color color)
 		m_os << "\n";
 	}
 
-
-	m_os << "Orientation ? ";
 	int t;
-	m_is >> t;
-	m_is.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+	while (true) {
+		m_os << "Orientation ? ";
+		t = -1;
+		try {
+			std::string line = readLine();
+			size_t consumed = 0;
+			t = std::stoi(line, &consumed);
+			if (!onlySpacesAfter(line, consumed))
+				t = -1;
+		} catch (const std::exception&) {
+			t = -1;
+		}
+		if (t >= 0 && t < TRANSFORMATIONS.size())
+			break;
+		m_os << "Entrée invalide : veuillez entrer un numéro d'orientation entre 0 et "
+		     << (TRANSFORMATIONS.size() - 1) << ".\n";
+	}
 
-	if (t >= 0 && t < TRANSFORMATIONS.size())
-		return TRANSFORMATIONS[t];
-	else
-		return Transformation::None;
+	return TRANSFORMATIONS[t];
 }
 
 std::ostream& TextInterface::getMessageOutput()
