@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 #include "game.h"
 #include "color.h"
 #include "text_interface.h"
@@ -40,6 +41,19 @@ int main()
 	for (int i = 0; i < 4; i++) {
 		ui.getMessageOutput() << "Score " << names[i] << " : "
 		                      << g.computeScore(colors[i]) << "\n";
+	}
+
+	std::vector<Color> winners = g.winners();
+	if (winners.size() == 1) {
+		ui.getMessageOutput() << "Vainqueur : " << winners[0] << "\n";
+	} else {
+		ui.getMessageOutput() << "Égalité entre : ";
+		for (size_t i = 0 ; i < winners.size() ; i++) {
+			if (i > 0)
+				ui.getMessageOutput() << ", ";
+			ui.getMessageOutput() << winners[i];
+		}
+		ui.getMessageOutput() << "\n";
 	}
 
 	return 0;

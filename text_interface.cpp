@@ -1,4 +1,3 @@
-#include <limits>
 #include <iomanip>
 #include <array>
 #include <vector>
@@ -6,6 +5,8 @@
 #include <numeric>
 #include <locale>
 #include <codecvt>
+#include <sstream>
+#include <cstdlib>
 
 #include "text_interface.h"
 #include "board.h"
@@ -14,6 +15,55 @@ TextInterface::TextInterface(std::istream& input, std::ostream& output) :
 	m_is{input},
 	m_os{output}
 {}
+
+std::string TextInterface::readLine()
+{
+	std::string line;
+	if (!std::getline(m_is, line)) {
+		m_os << "\nEntrée fermée, fin du programme." << std::endl;
+		std::exit(0);
+	}
+	return line;
+}
+
+bool TextInterface::onlySpacesAfter(const std::string& line, size_t pos)
+{
+	for (size_t i = pos ; i < line.size() ; i++) {
+		if (line[i] != ' ' && line[i] != '\t')
+			return false;
+	}
+	return true;
+}
+
+static std::string colorizeBlocks(const std::string& line, Color color)
+{
+	std::string out;
+	out.reserve(line.size());
+	bool inBlock = false;
+	size_t i = 0;
+	while (i < line.size()) {
+		if (i + 2 < line.size()
+				&& (unsigned char)line[i] == 0xE2
+				&& (unsigned char)line[i + 1] == 0x96
+				&& (unsigned char)line[i + 2] == 0x88) {
+			if (!inBlock) {
+				out += colorCode(color);
+				inBlock = true;
+			}
+			out += "\xE2\x96\x88";
+			i += 3;
+		} else {
+			if (inBlock) {
+				out += "\033[0m";
+				inBlock = false;
+			}
+			out += line[i++];
+		}
+	}
+	if (inBlock)
+		out += "\033[0m";
+	return out;
+}
 
 
 std::u16string TextInterface::printPiece(const Piece& piece, int idx)
@@ -70,7 +120,7 @@ std::u16string TextInterface::printPiece(const Piece& piece, const Transformatio
 	return display;
 }
 
-PiecesSet::PieceIterator TextInterface::getPiece(const PiecesSet& piecesSet)
+PiecesSet::PieceIterator TextInterface::getPiece(const PiecesSet& piecesSet, Color color)
 {
 	std::vector<std::u16string> lines;
 	std::array<std::u16string, 4> ls;
@@ -97,7 +147,7 @@ PiecesSet::PieceIterator TextInterface::getPiece(const PiecesSet& piecesSet)
 	for (int i=0 ; i<lines.size() ; i++) {
 		if (i % 4 == 0)
 			m_os << "\n";
-		m_os << converter.to_bytes(lines[i]) << "\n";
+		m_os << colorizeBlocks(converter.to_bytes(lines[i]), color) << "\n";
 	}
 	m_os << "\n";
 
@@ -123,7 +173,7 @@ Coordinate TextInterface::getPosition()
 	return c;
 }
 
-Transformation TextInterface::getTransformation(const Piece* piece)
+Transformation TextInterface::getTransformation(const Piece* piece, Color color)
 {
 	if (piece) {
 		const Piece& p = *piece;
@@ -140,7 +190,7 @@ Transformation TextInterface::getTransformation(const Piece* piece)
 
 		std::wstring_convert<std::codecvt_utf8<char16_t>, char16_t> converter;
 		for (int i=0 ; i<ls.size() ; i++) {
-			m_os << converter.to_bytes(ls[i]) << "\n";
+			m_os << colorizeBlocks(converter.to_bytes(ls[i]), color) << "\n";
 		}
 		m_os << "\n";
 	}
@@ -181,24 +231,14 @@ void TextInterface::displayBoard(const Board& board)
 		else
 			m_os << "   ";
 		for (int column = 0 ; column < Board::SIZE ; column++) {
-			switch (board.getColor(Coordinate{column, line})) {
-				case Color::Empty:
-					m_os << ((line + column == 0) ? "🭼▁" :
-						(line + column == Board::SIZE * 2 - 2) ? "▔🭾" :
-						((line + column) % 2 == 1) ? "░░" : "  ");
-					break;
-				case Color::Blue:
-					m_os << "\033[34m" << "██" << "\033[0m";
-					break;
-				case Color::Yellow:
-					m_os << "\033[33m" << "██" << "\033[0m";
-					break;
-				case Color::Red:
-					m_os << "\033[31m" << "██" << "\033[0m";
-					break;
-				case Color::Green:
-					m_os << "\033[32m" << "██" << "\033[0m";
-					break;
+			Color cell = board.getColor(Coordinate{column, line});
+			if (cell == Empty) {
+				m_os << ((line + column == 0) ? "🭼▁" :
+					(line + column == Board::SIZE * 2 - 2) ? "▔🭾" :
+					((line + column) % 2 == 1) ? "░░" : "  ");
+			} else {
+			    //La logique de la couleur a été déplacé dans le header color.h pour l'utiliser sur les pieces du menu
+				m_os << colorCode(cell) << "██" << "\033[0m";
 			}
 		}
 		if (line % 2 == 1)

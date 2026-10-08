@@ -33,10 +33,10 @@ int Game::remainingPieces(Color color){
 
 bool Game::isFinished(){
     for (Player& player : players) {
-        Color color = player.getColor();               
-        PiecesSet pieces = player.getPlayerPieceList(); 
+        Color color = player.getColor();
+        PiecesSet pieces = player.getPlayerPieceList();
         if (board.canPlay(pieces, color)) {
-            return false; 
+            return false;
         }
     }
     return true;
@@ -64,11 +64,29 @@ int Game::computeScore(Color color){
     return score;
 }
 
+// Renvoie tous les joueurs ayant le score maximal
+std::vector<Color> Game::winners(){
+    std::vector<Color> winners;
+    int bestScore = computeScore(players[0].getColor());
+    for (int i = 0 ; i < 4 ; i++) {
+        Color color = players[i].getColor();
+        int score = computeScore(color);
+        if (score > bestScore) {
+            bestScore = score;
+            winners.clear();
+            winners.push_back(color);
+        } else if (score == bestScore) {
+            winners.push_back(color);
+        }
+    }
+    return winners;
+}
+
 void Game::playTurn(Color color){
     Player* player = findPlayer(color);
 
     userinterface.getMessageOutput()
-        << "==== NOUVEAU TOUR : C'est au tout du joueur " << color << " ====\n";
+        << "==== NOUVEAU TOUR : C'est au tour du joueur " << color << " ====\n";
 
     PiecesSet piecesForCheck = player->getPlayerPieceList();
     if (!board.canPlay(piecesForCheck, color)) {
@@ -81,20 +99,22 @@ void Game::playTurn(Color color){
     while (!placed) {
         userinterface.displayBoard(board);
 
+        // Copie des pièces disponibles pour l'interface et la validation
         PiecesSet availablePieces = player->getPlayerPieceList();
-        PiecesSet::PieceIterator pieceIt = userinterface.getPiece(availablePieces);
+        PiecesSet::PieceIterator pieceIt = userinterface.getPiece(availablePieces, color);
         if (pieceIt == availablePieces.end()) {
             userinterface.getMessageOutput() << "Numéro de pièce invalide, recommencez.\n";
             continue;
         }
         Piece& piece = **pieceIt; // *pieceIt -> Piece* ; ** -> Piece&
 
-        Transformation transformation = userinterface.getTransformation(&piece);
+        Transformation transformation = userinterface.getTransformation(&piece, color);
         Coordinate origin = userinterface.getPosition();
 
         std::string error = board.place(availablePieces, piece, transformation, origin, color);
 
         if (error.empty()) {
+            // Pose validée par le plateau si aucun message n'est renvoyé
             player->play(piece);
             placed = true;
         } else {

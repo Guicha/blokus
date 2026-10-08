@@ -1,6 +1,8 @@
 #ifndef BLOKUS_GAME_H
 #define BLOKUS_GAME_H
 
+#include <vector>
+
 #include "board.h"
 #include "player.h"
 #include "user_interface.h"
@@ -20,6 +22,7 @@ public:
     void nextTurn();
     bool isFinished();
     int computeScore(Color color);
+    std::vector<Color> winners();
     	void playTurn(Color color);
     	int remainingPieces(Color color);
 
