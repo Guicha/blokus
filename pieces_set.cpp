@@ -60,11 +60,10 @@ int PiecesSet::size() const{
 
 void PiecesSet::remove(Piece &pieceToRemove){
     int i=0;
-    // find the element to remove in the list and remove it(by starting count to the first element and count each iteration)
+    // cherche l'element dans la liste qui est egal a la piece a retirer et le retire
     for (const Piece* p: piecesList) {
         if (*p == pieceToRemove) {
             piecesList.erase(piecesList.begin()+i);
-            std::cout<<"Piece deleted"<<std::endl;
             return;
         }
         i++;
