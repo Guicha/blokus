@@ -1,6 +1,7 @@
 #include "placement.h"
 #include "board.h"
 #include "coordinate.h"
+#include <iostream>
 
 Placement::Placement(const Transformation& transformation, const Coordinate& origin, const Color& color) :
   transformation{transformation},
@@ -25,7 +26,11 @@ std::vector<Coordinate> Placement::calculateTransformation(std::vector<Coordinat
 }
 
 bool Placement::isValid(Piece* p) {
-  std::vector<Coordinate> targetPosition = calculateTransformation(calculatePosition((*p).getSquares()));
+  std::vector<Coordinate> targetPosition = calculatePosition(calculateTransformation((*p).getSquares()));
+  /*for (Coordinate c : targetPosition) {
+    std::cout << "(" << c.x << " " << c.y << ")" << " ";
+  }
+  std::cout << "\n";*/
 
   for (const Coordinate& c : targetPosition) {
     if (c.x < 0 || c.x >= Board::SIZE || c.y < 0 || c.y >= Board::SIZE) {

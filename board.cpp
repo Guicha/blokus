@@ -3,6 +3,7 @@
 #include "coordinate.h"
 #include "pieces_set.h"
 #include "transformation.h"
+#include <iostream>
 
 Board::Board() {
   for (int i=0; i<Board::SIZE; i++) {
@@ -34,7 +35,12 @@ bool Board::canPlace(PiecesSet& piecesSet, Piece& piece, Placement& placement) {
   // Dans le cas ou la liste de pieces du joueur est a sa taille maximale, cela veut dire qu'il n'a pas encore joué et que c'est donc le premier tour du jeu
   if (piecesSet.getPiecesList().size() == PiecesSet::SET_SIZE) {
     // On teste donc si la piece placée recouvre au moins un des 4 coins du plateau
-    std::vector<Coordinate> targetPosition = placement.calculateTransformation(placement.calculatePosition(piece.getSquares()));
+    std::vector<Coordinate> targetPosition = placement.calculatePosition(placement.calculateTransformation(piece.getSquares()));
+    /*std::cout << "=== LE JOUEUR N'A JAMAIS JOUE ===\n";
+    for (Coordinate c : targetPosition) {
+      std::cout << "(" << c.x << " " << c.y << ")" << " ";
+    }
+    std::cout << "\n";*/
     Coordinate corners[4] = {
       {0, 0},
       {0, 19},
@@ -57,7 +63,12 @@ bool Board::canPlace(PiecesSet& piecesSet, Piece& piece, Placement& placement) {
     return false;
   } else {
     // Dans ce cas, on est plus au premier tour et les règles de base s'appliquent donc
-    std::vector<Coordinate> targetPosition = placement.calculateTransformation(placement.calculatePosition(piece.getSquares()));
+    std::vector<Coordinate> targetPosition = placement.calculatePosition(placement.calculateTransformation(piece.getSquares()));
+    /*std::cout << "=== LE JOUER A DEJA JOUE ===\n";
+    for (Coordinate c : targetPosition) {
+      std::cout << "(" << c.x << " " << c.y << ")" << " ";
+    }
+    std::cout << "\n";*/
 
     // On vérifie d'abord si l'espace recouvert par la piece est disponible/vide
     for (const Coordinate& c : targetPosition) {
@@ -148,13 +159,13 @@ std::string Board::place(PiecesSet& piecesSet, Piece& piece, const Transformatio
   }
 
   // On place la pièce (sans modifier la pièce elle-même : piecesPool est partagée par les 4 joueurs)
-  std::vector<Coordinate> targetPosition = placement.calculateTransformation(placement.calculatePosition(piece.getSquares()));
+  std::vector<Coordinate> targetPosition = placement.calculatePosition(placement.calculateTransformation(piece.getSquares()));
 
   for (Coordinate c : targetPosition) {
     this->at(c.x, c.y) = color;
   }
 
-  piecesSet.remove(piece);
+  //piecesSet.remove(piece);
 
   // Le placement a réussi : on renvoie une chaîne vide
   return "";
